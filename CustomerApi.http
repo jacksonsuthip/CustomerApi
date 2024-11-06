@@ -1,0 +1,23 @@
+@CustomerApi_HostAddress = http://localhost:22963
+
+GET {{CustomerApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{CustomerApi_HostAddress}}/api/customer
+Accept: application/json
+
+### 
+POST {{CustomerApi_HostAddress}}/api/customer
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Name": "Lionel Messi",
+  "Address": "Paris, France",
+  "Email": "messi@football.com",
+  "MobileNo": "9876543210",
+  "GeoLocation": "48.8566,2.3522"
+}
+###
