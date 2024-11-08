@@ -1,5 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CustomerApi.Models.Entities;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace CustomerApi.Controllers
 {
@@ -8,10 +14,12 @@ namespace CustomerApi.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly PdfService _pdfService;
 
-        public CustomersController(ICustomerRepository customerRepository)
+        public CustomersController(ICustomerRepository customerRepository, PdfService pdfService)
         {
             _customerRepository = customerRepository;
+            _pdfService = pdfService;
         }
 
         // GET: api/customers
@@ -90,6 +98,21 @@ namespace CustomerApi.Controllers
         {
             await _customerRepository.DeleteCustomer(customerCode);
             return NoContent();  // No content on successful deletion
+        }
+
+        [HttpPost("print")]
+        public IActionResult Print([FromBody] List<CustomerMaster> customers)
+        {
+            try
+            {
+                var pdfBytes = _pdfService.GenerateCustomerPdf(customers);
+
+                return File(pdfBytes, "application/pdf", "customer_list.pdf");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while generating the PDF: {ex.Message}");
+            }
         }
     }
 }

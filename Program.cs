@@ -24,6 +24,7 @@ builder.Services.AddDbContext<CustomerDbContext>(options =>
 
 // Register the repository
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<PdfService>();
 
 var app = builder.Build();
 
